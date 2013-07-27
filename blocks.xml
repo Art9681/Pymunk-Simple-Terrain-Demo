@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<resource>
+ <imageatlas size="32x32" file="tiles.png">
+    <image id="i-rock" offset="0, 0" />
+    <image id="i-sand" offset="32, 0" />
+    <image id="i-wood" offset="64, 0" />
+    <image id="i-air" offset="0, 32" />
+    <image id="i-dirt" offset="32, 32" />
+    <image id="i-grass" offset="64,32" />
+
+ </imageatlas>
+ <tileset>
+    <tile id="rock"><image ref="i-rock" /></tile>
+    <tile id="sand"><image ref="i-sand" /></tile>
+    <tile id="wood"><image ref="i-wood" /></tile>
+    <tile id="air"><image ref="i-air" /></tile>
+    <tile id="dirt"><image ref="i-dirt" /></tile>
+    <tile id="grass"><image ref="i-grass" /></tile>
+ </tileset>
+</resource>

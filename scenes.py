@@ -12,10 +12,13 @@ class MyGame(cocos.scene.Scene):
         self.clock = pyglet.clock
 
         #The layers this scene has.
-        self.mainLayer = layers.MainLayer()
+        #self.mainLayer = layers.MainLayer()
+
+        self.resource = cocos.tiles.load('test.xml')['map0']
+        self.add(self.resource)
 
 
         #Add the layers to the scene.
-        self.add(self.mainLayer, z=0)
+        #self.add(self.mainLayer, z=0)
 
         #self.clock.schedule(self.levelMain.update)
