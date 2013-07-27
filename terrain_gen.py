@@ -1,3 +1,4 @@
+import random
 from noise import snoise2, pnoise2
 import xml.etree.cElementTree as ET
 
@@ -16,8 +17,8 @@ class Gen_XML(object):
         self.source_size = (96, 64)
 
         #Begin noise code
-        self.octaves = 30
-        self.freq = 16.0 * self.octaves
+        self.octaves = random.randint(16, 30)
+        self.freq = random.uniform(16.0, 30.0) * self.octaves
         self.nData = []
 
         for y in range(32):
