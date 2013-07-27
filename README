@@ -1,1 +1,5 @@
-This file was created by PyCharm 2.7.3 for binding GitHub repository
+TODO:
+
+1. Add scrolling background layer.
+2. Add camera. (Focus of scrolling layer).
+3. Mouse click event, generate air block where mouse clicks.

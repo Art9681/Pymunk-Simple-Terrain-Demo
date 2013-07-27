@@ -17,8 +17,11 @@ class Gen_XML(object):
         self.source_size = (96, 64)
 
         #Begin noise code
-        self.octaves = random.randint(16, 30)
-        self.freq = random.uniform(16.0, 30.0) * self.octaves
+        self.octaves = random.randint(1, 5)
+        print self.octaves
+        #self.freq = random.uniform(1.0, 30.0) * self.octaves
+        self.freq = 3.0 * self.octaves
+        print self.freq
         self.nData = []
 
         for y in range(32):
@@ -46,9 +49,10 @@ class Gen_XML(object):
 
             for row in range(self.rows):
                 self.cell = ET.SubElement(self.column, "cell")
-                self.cell.set("tile", "air" if self.nData[self.counter] <= 100 else "dirt")
+                #self.cell.set("tile", "air" if self.nData[self.counter] <= 64 or row >= random.randint(10,12) else ("dirt" if self.nData[self.counter] <= 128 else ("rock" if self.nData[self.counter] <= 192 else "sand")))
+                self.cell.set("tile", "air" if self.nData[self.counter] <= 64 else ("dirt" if self.nData[self.counter] <= 128 else ("rock" if self.nData[self.counter] <= 192 else "sand")))
                 self.counter += 1
-                print self.counter
+
 
 
 
