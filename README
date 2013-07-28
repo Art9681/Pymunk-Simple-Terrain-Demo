@@ -1,3 +1,7 @@
+Requires Python, Pyglet, Cocos2D and noise libraries.
+
+Run main.py to launch demo.
+
 Notes:
 - It takes a split second to generate the level! This is because it is all loaded into memory.
 
