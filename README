@@ -1,5 +1,13 @@
-TODO:
+Notes:
+- It takes a split second to generate the level! This is because it is all loaded into memory.
 
-1. Add scrolling background layer.
-2. Add camera. (Focus of scrolling layer).
-3. Mouse click event, generate air block where mouse clicks.
+TODO:
+- Mouse click event, generate air block where mouse clicks.
+- Load level in chunks.
+
+
+Recent changes:
+- Added scrolling background layer.
+- Added input. W, A, S, D keys scroll level.
+- Mouse move returns position in world coordinates.
+- Mouse click returns Cell texture id.

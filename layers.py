@@ -28,7 +28,8 @@ class Scroller(object):
         #Begin Keyboard code.
         self.keyboard = key.KeyStateHandler()
         director.window.push_handlers(self.keyboard)
-        director.window.push_handlers(self.on_key_press, self.on_key_release)
+        director.window.push_handlers(self.on_mouse_motion)
+        director.window.push_handlers(self.on_key_press, self.on_key_release, self.on_mouse_press)
 
     def update(self, dt):
         self.scroller.force_focus(self.cam_target.x, self.cam_target.y)
@@ -44,29 +45,43 @@ class Scroller(object):
 
 
     def on_key_press(self, symbol, modifiers):
-            if symbol == key.W:
-                print "W key pressed"
-                self.clock.schedule(self.move_cam_up)
-            if symbol == key.S:
-                print "W key pressed"
-                self.clock.schedule(self.move_cam_down)
-            if symbol == key.A:
-                print "W key pressed"
-                self.clock.schedule(self.move_cam_left)
-            if symbol == key.D:
-                print "W key pressed"
-                self.clock.schedule(self.move_cam_right)
+        if symbol == key.W:
+            print "W key pressed"
+            self.clock.schedule(self.move_cam_up)
+        if symbol == key.S:
+            print "W key pressed"
+            self.clock.schedule(self.move_cam_down)
+        if symbol == key.A:
+            print "W key pressed"
+            self.clock.schedule(self.move_cam_left)
+        if symbol == key.D:
+            print "W key pressed"
+            self.clock.schedule(self.move_cam_right)
 
     def on_key_release(self, symbol, modifiers):
-            if symbol == key.W:
-                print "stopped"
-                self.clock.unschedule(self.move_cam_up)
-            if symbol == key.S:
-                print "W key pressed"
-                self.clock.unschedule(self.move_cam_down)
-            if symbol == key.A:
-                print "W key pressed"
-                self.clock.unschedule(self.move_cam_left)
-            if symbol == key.D:
-                print "W key pressed"
-                self.clock.unschedule(self.move_cam_right)
+        if symbol == key.W:
+            print "stopped"
+            self.clock.unschedule(self.move_cam_up)
+        if symbol == key.S:
+            print "W key pressed"
+            self.clock.unschedule(self.move_cam_down)
+        if symbol == key.A:
+            print "W key pressed"
+            self.clock.unschedule(self.move_cam_left)
+        if symbol == key.D:
+            print "W key pressed"
+            self.clock.unschedule(self.move_cam_right)
+
+    def on_mouse_press (self, x, y, buttons, modifiers):
+        #print self.scroller.pixel_from_screen(x, y)
+        self.cell = self.terrain_layer.get_at_pixel(x, y)
+        print self.cell.tile.id
+
+
+
+
+
+
+
+    def on_mouse_motion(self, x, y, dx, dy):
+        print '%d, %d' % (x, y)

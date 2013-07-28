@@ -8,7 +8,7 @@ class Gen_XML(object):
     def __init__(self):
 
         #The map variables.
-        self.map_size = (1024, 768)
+        self.map_size = (10024, 10024)
         self.tile_size = 32
         self.columns = self.map_size[0]/self.tile_size
         self.rows = self.map_size[1]/self.tile_size
@@ -17,15 +17,15 @@ class Gen_XML(object):
         self.source_size = (96, 64)
 
         #Begin noise code
-        self.octaves = random.randint(1, 5)
+        self.octaves = random.randint(3, 6)
         print self.octaves
         #self.freq = random.uniform(1.0, 30.0) * self.octaves
-        self.freq = 3.0 * self.octaves
+        self.freq = 8.0 * self.octaves
         print self.freq
         self.nData = []
 
-        for y in range(32):
-            for x in range (24):
+        for y in range(self.columns):
+            for x in range (self.rows):
                 self.nData.append(int(snoise2(x / self.freq, y / self.freq, self.octaves) * 127.0 + 128.0 ))
         #End noise code
 
