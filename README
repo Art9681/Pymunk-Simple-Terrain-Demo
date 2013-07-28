@@ -7,10 +7,12 @@ Notes:
 - Also lags a bit on quit.
 
 Recent changes:
+- Mouse scroll zooms in or out. Careful! If you zoom out too much it will crash.
 - Mouse click removes tile and triggers map redraw. (Pretty fast for the map size!)
 - Moar caves!
 
 TODO:
+- Limit zoom to prevent crash.
 - Highlight tile on mouse hover.
 - LEFT mouse click changes tile. RIGHT mouse click deletes tile.
 - Add menu to select tiles or other items.

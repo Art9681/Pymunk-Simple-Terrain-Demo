@@ -1,12 +1,14 @@
 import cocos
 from cocos import layer, tiles, actions
 from pyglet.window import key, mouse
+from pyglet.gl import *
 
 
 #Handles the scrolling manager. Physics layers get added to this and this class gets added to the scene.
 class Scroller(object):
     def __init__(self, director, clock):
         super(Scroller, self).__init__()
+        self.highlight = None
 
         self.clock = clock
 
@@ -28,12 +30,25 @@ class Scroller(object):
         #Begin Keyboard code.
         self.keyboard = key.KeyStateHandler()
         director.window.push_handlers(self.keyboard)
-        director.window.push_handlers(self.on_mouse_motion)
+        director.window.push_handlers(self.on_mouse_scroll)
         director.window.push_handlers(self.on_key_press, self.on_key_release, self.on_mouse_press)
 
     def update(self, dt):
         #Forces focus and allows to go out of map bounds. There is a different function to keep it in bounds.
         self.scroller.force_focus(self.cam_target.x, self.cam_target.y)
+
+    def draw(self):
+        if self.highlight is None:
+            return
+        glPushMatrix()
+        self.terrain_layer.transform()
+        glPushAttrib(GL_CURRENT_BIT | GL_ENABLE_BIT)
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        glColor4f(1, 1, 0, .3)
+        glRectf(*self.highlight)
+        glPopAttrib()
+        glPopMatrix()
 
     def move_cam_up(self, dt):
         self.cam_target.y = self.cam_target.y + 1
@@ -83,4 +98,24 @@ class Scroller(object):
 
     def on_mouse_motion(self, x, y, dx, dy):
         #print '%d, %d' % (x, y)
-        pass
+        self.cell = self.terrain_layer.get_at_pixel(*self.scroller.pixel_from_screen(x, y))
+        if not self.cell:
+            self.highlight = None
+            return True
+        self.x = self.cell.x + self.terrain_layer.origin_x
+        self.y = self.cell.y + self.terrain_layer.origin_y
+        self.highlight = (self.x, self.y, self.x + self.terrain_layer.tw, self.y + self.terrain_layer.th)
+        return True
+
+    _desired_scale = 1
+    def on_mouse_scroll(self, x, y, dx, dy):
+        if dy < 0:
+            if self._desired_scale < .2: return True
+            self._desired_scale -= .1
+        elif dy > 0:
+            if self._desired_scale > 2: return True
+            self._desired_scale += .1
+        if dy:
+            self.scroller.do(cocos.actions.ScaleTo(self._desired_scale, .1))
+            return True
+
