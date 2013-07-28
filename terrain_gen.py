@@ -2,13 +2,11 @@ import random
 from noise import snoise2, pnoise2
 import xml.etree.cElementTree as ET
 
-
-
 class Gen_XML(object):
     def __init__(self):
 
         #The map variables.
-        self.map_size = (10024, 10024)
+        self.map_size = (5012, 5012)
         self.tile_size = 32
         self.columns = self.map_size[0]/self.tile_size
         self.rows = self.map_size[1]/self.tile_size
@@ -19,8 +17,8 @@ class Gen_XML(object):
         #Begin noise code
         self.octaves = random.randint(3, 6)
         print self.octaves
-        #self.freq = random.uniform(1.0, 30.0) * self.octaves
-        self.freq = 8.0 * self.octaves
+        self.freq = random.uniform(1.0, 10.0) * self.octaves
+        #self.freq = 8.0 * self.octaves
         print self.freq
         self.nData = []
 
