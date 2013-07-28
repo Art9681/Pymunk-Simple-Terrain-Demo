@@ -29,8 +29,6 @@ class Gen_XML(object):
                 self.nData.append(int(snoise2(x / self.freq, y / self.freq, self.octaves) * 127.0 + 128.0 ))
         #End noise code
 
-
-
         self.xml_tilemap()
 
     def xml_tilemap(self):
@@ -50,7 +48,7 @@ class Gen_XML(object):
             for row in range(self.rows):
                 self.cell = ET.SubElement(self.column, "cell")
                 #self.cell.set("tile", "air" if self.nData[self.counter] <= 64 or row >= random.randint(10,12) else ("dirt" if self.nData[self.counter] <= 128 else ("rock" if self.nData[self.counter] <= 192 else "sand")))
-                self.cell.set("tile", "air" if self.nData[self.counter] <= 64 else ("dirt" if self.nData[self.counter] <= 128 else ("rock" if self.nData[self.counter] <= 192 else "sand")))
+                self.cell.set("tile", "rock" if self.nData[self.counter] <= 64 else ("air" if self.nData[self.counter] <= 128 else ("dirt" if self.nData[self.counter] <= 192 else "sand")))
                 self.counter += 1
 
 

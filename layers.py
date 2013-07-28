@@ -19,11 +19,11 @@ class Scroller(object):
         #Begin Scrolling Manager.
         self.scroller = cocos.layer.ScrollingManager()
         self.terrain_layer = cocos.tiles.load('test.xml')['map0']
+        #self.terrain_layer.set_debug(True)
         self.terrain_layer.width = 1920
         self.terrain_layer.height = 1080
         self.scroller.add(self.terrain_layer)
         self.scroller.add(self.cam_layer)
-
 
         #Begin Keyboard code.
         self.keyboard = key.KeyStateHandler()
@@ -32,6 +32,7 @@ class Scroller(object):
         director.window.push_handlers(self.on_key_press, self.on_key_release, self.on_mouse_press)
 
     def update(self, dt):
+        #Forces focus and allows to go out of map bounds. There is a different function to keep it in bounds.
         self.scroller.force_focus(self.cam_target.x, self.cam_target.y)
 
     def move_cam_up(self, dt):
@@ -43,7 +44,7 @@ class Scroller(object):
     def move_cam_right(self, dt):
         self.cam_target.x = self.cam_target.x + 1
 
-
+    #Begin input code.
     def on_key_press(self, symbol, modifiers):
         if symbol == key.W:
             print "W key pressed"
@@ -73,10 +74,13 @@ class Scroller(object):
             self.clock.unschedule(self.move_cam_right)
 
     def on_mouse_press (self, x, y, buttons, modifiers):
-        #print self.scroller.pixel_from_screen(x, y)
-        self.cell = self.terrain_layer.get_at_pixel(x, y)
-        print self.cell.tile.id
-
+        #Gets the cell's location from the scrolling manager world coordinates.
+        self.cell = self.terrain_layer.get_at_pixel(*self.scroller.pixel_from_screen(x, y))
+        #Removes the tile, effectively deleting it from the map.
+        self.cell.tile = None
+        #Redraws the map. Need to create function that redraws the tile only.
+        self.terrain_layer.set_dirty()
 
     def on_mouse_motion(self, x, y, dx, dy):
-        print '%d, %d' % (x, y)
+        #print '%d, %d' % (x, y)
+        pass

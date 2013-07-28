@@ -4,14 +4,24 @@ Run main.py to launch demo.
 
 Notes:
 - It takes a split second to generate the level! This is because it is all loaded into memory.
-
-TODO:
-- Mouse click event, generate air block where mouse clicks.
-- Load level in chunks.
-
+- Also lags a bit on quit.
 
 Recent changes:
+- Mouse click removes tile and triggers map redraw. (Pretty fast for the map size!)
+- Moar caves!
+
+TODO:
+- Highlight tile on mouse hover.
+- LEFT mouse click changes tile. RIGHT mouse click deletes tile.
+- Add menu to select tiles or other items.
+- Add developer menu.
+- Apply 1D noise to divide ground and sky.
+- Load level in chunks.
+
+Older changes:
 - Added scrolling background layer.
 - Added input. W, A, S, D keys scroll level.
+
+Removed:
 - Mouse move returns position in world coordinates.
 - Mouse click returns Cell texture id.
