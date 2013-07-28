@@ -7,7 +7,7 @@ Notes:
 - Also lags a bit on quit.
 
 Recent changes:
-- Mouse scroll zooms in or out. Careful! If you zoom out too much it will crash.
+- Mouse scroll zooms in or out. Careful! Scrolling while you zoom out too much it will crash.
 - Mouse click removes tile and triggers map redraw. (Pretty fast for the map size!)
 - Moar caves!
 
