@@ -19,7 +19,6 @@ TODO:
 - LEFT mouse click changes tile. RIGHT mouse click deletes tile.
 - Add menu to select tiles or other items.
 - Add developer menu.
-- Apply 1D noise to divide ground and sky.
 - Load level in chunks.
 
 Older changes:
