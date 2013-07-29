@@ -14,13 +14,13 @@ class Scroller(object):
         #The camera layer. Our target is the sprite.
         self.cam_layer = cocos.layer.ScrollableLayer()
         self.cam_target = cocos.sprite.Sprite("sword.png")
-        self.cam_target.position = (1024/2, 768/2)
+
+        #Spawn the camera target object at the viewport length/2 and terrain map height/2. Need to automate this.
+        self.cam_target.position = (1024/2, 5012/2)
         self.cam_layer.add(self.cam_target)
 
         #Begin terrain map layer.
         self.terrain_layer = cocos.tiles.load('test.xml')['map0']
-        self.terrain_layer.width = 1920
-        self.terrain_layer.height = 1080
 
         #Begin Scrolling Manager.
         self.scroller = cocos.layer.ScrollingManager()
