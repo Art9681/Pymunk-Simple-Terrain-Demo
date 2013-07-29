@@ -7,6 +7,8 @@ Notes:
 - Also lags a bit on quit.
 
 Recent changes:
+- Map is now divided between ground and sky.
+- Created function that interpolates column height to create rolling hills horizon.
 - Mouse scroll zooms in or out. Careful! Scrolling while you zoom out too much it will crash.
 - Mouse click removes tile and triggers map redraw. (Pretty fast for the map size!)
 - Moar caves!
