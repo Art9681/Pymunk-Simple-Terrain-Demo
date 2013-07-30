@@ -41,9 +41,7 @@ class Gen_XML(object):
         self.requires.set("file", "blocks.xml")
         self.rectmap = ET.SubElement(self.resource, "rectmap")
         self.rectmap.set("id", "map0")
-        #self.rectmap.set("origin", "100,0,0")
         self.rectmap.set("tile_size", "32x32")
-
         self.col_height = 80
 
         for col in range(self.columns):
@@ -55,7 +53,6 @@ class Gen_XML(object):
 
             for row in range(self.rows):
                 self.cell = ET.SubElement(self.column, "cell")
-                '''self.cell.set("tile", "air" if row > 80 else ("rock" if self.noise_data[self.noise_counter] <= 64 else ("air" if self.noise_data[self.noise_counter] <= 128 else ("dirt" if self.noise_data[self.noise_counter] <= 192 else "sand"))))'''
                 self.cell.set("tile", "air" if row > self.col_height else ("rock" if self.noise_data[self.noise_counter] <= 64 else ("air" if self.noise_data[self.noise_counter] <= 128 else ("dirt" if self.noise_data[self.noise_counter] <= 192 else "sand"))))
 
                 self.noise_counter += 1

@@ -10,11 +10,33 @@
 
  </imageatlas>
  <tileset>
-    <tile id="rock"><image ref="i-rock" /></tile>
-    <tile id="sand"><image ref="i-sand" /></tile>
-    <tile id="wood"><image ref="i-wood" /></tile>
-    <tile id="air"><image ref="i-air" /></tile>
-    <tile id="dirt"><image ref="i-dirt" /></tile>
-    <tile id="grass"><image ref="i-grass" /></tile>
+    <tile id="rock">
+        <image ref="i-rock" />
+        <property name="top" value="yes" />
+
+    </tile>
+    <tile id="sand">
+        <image ref="i-sand" />
+        <property name="top" value="yes" />
+
+    </tile>
+    <tile id="wood">
+        <image ref="i-wood" />
+        <property name="top" value="yes" />
+
+    </tile>
+    <tile id="air">
+        <image ref="i-air" />
+    </tile>
+    <tile id="dirt">
+        <image ref="i-dirt" />
+        <property name="top" value="yes" />
+
+    </tile>
+    <tile id="grass">
+        <image ref="i-grass" />
+        <property name="top" value="yes" />
+
+    </tile>
  </tileset>
 </resource>
