@@ -16,11 +16,12 @@ Recent changes:
 
 
 TODO:
+- Add developer menu.
+- Add algorithm to generate pymunk segment colliders around terrain blocks.
 - Limit zoom to prevent crash.
 - Highlight tile on mouse hover.
 - LEFT mouse click changes tile. RIGHT mouse click deletes tile.
 - Add menu to select tiles or other items.
-- Add developer menu.
 - Load level in chunks.
 
 Older changes:

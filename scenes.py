@@ -3,6 +3,12 @@ import cocos
 from pyglet.window import key, mouse
 import layers
 
+class DevScene(cocos.scene.Scene):
+    def __init__(self):
+        super(DevScene, self).__init__()
+
+
+
 class MyGame(cocos.scene.Scene):
     def __init__(self, director):
         super(MyGame, self).__init__()

@@ -12,29 +12,35 @@
  <tileset>
     <tile id="rock">
         <image ref="i-rock" />
+        <property name="btype" value="rock" />
         <property name="top" value="yes" />
 
     </tile>
     <tile id="sand">
         <image ref="i-sand" />
+        <property name="btype" value="sand" />
         <property name="top" value="yes" />
 
     </tile>
     <tile id="wood">
         <image ref="i-wood" />
+        <property name="btype" value="wood" />
         <property name="top" value="yes" />
 
     </tile>
     <tile id="air">
         <image ref="i-air" />
+        <property name="btype" value="air" />
     </tile>
     <tile id="dirt">
         <image ref="i-dirt" />
+        <property name="btype" value="dirt" />
         <property name="top" value="yes" />
 
     </tile>
     <tile id="grass">
         <image ref="i-grass" />
+        <property name="btype" value="grass" />
         <property name="top" value="yes" />
 
     </tile>
