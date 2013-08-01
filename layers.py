@@ -3,8 +3,10 @@ from cocos import layer, tiles, actions
 from pyglet.window import key, mouse
 import pymunk
 import pymunk.pyglet_util
+import player
 
 class PhysicsLayer(cocos.layer.ScrollableLayer):
+    is_event_handler = True
     def __init__(self, clock):
         super( PhysicsLayer, self ).__init__()
 
@@ -12,12 +14,22 @@ class PhysicsLayer(cocos.layer.ScrollableLayer):
         self.space.collision_slop = 0.3
         self.space.gravity = (0,-700)
 
-    def create_segment(self, start, end):
-        segment = pymunk.Segment(self.space.static_body, start, end, 1)
-        self.space.add(segment)
+        self.player = player.Player(pos=(5056/2, 4000))
 
-    def draw(self):
-        pymunk.pyglet_util.draw(self.space)
+        self.space.add(self.player.body, self.player.shape)
+
+        self.add(self.player.sprite)
+
+    def create_segment(self, start, end):
+        self.segment = pymunk.Segment(self.space.static_body, start, end, 1)
+        self.space.add(self.segment)
+
+    '''def draw(self):
+        pymunk.pyglet_util.draw(self.space)'''
+
+    def update(self, dt):
+        self.player.update()
+        self.space.step(dt)
 
 
 #Contains scrolling manager, tilemap and player layers.
@@ -27,6 +39,8 @@ class Scroller(object):
         global scroller, terrain_layer, keyboard
 
         self.clock = clock
+        #Begin Scrolling Manager.
+        self.scroller = cocos.layer.ScrollingManager()
 
         #Grab physics layer.
         self.physics_layer = PhysicsLayer(clock)
@@ -34,21 +48,21 @@ class Scroller(object):
         #The camera layer. Our target is the sprite.
         self.cam_layer = cocos.layer.ScrollableLayer()
         self.cam_target = cocos.sprite.Sprite("player.png")
+
         #self.cam_target.do(MapCollider())
 
         #Spawn the camera target object at the viewport length/2 and terrain map height/2. Need to automate this.
-        self.cam_target.position = (1024/2, 5012/2)
-        self.cam_layer.add(self.cam_target)
+        #self.cam_target.position = (1024/2, 5012/2)
+        #self.cam_layer.add(self.cam_target)
 
         #Begin terrain map layer.
         self.terrain_layer = cocos.tiles.load('test.xml')['map0']
-        terrain_layer = self.terrain_layer
-        #Begin Scrolling Manager.
-        scroller = cocos.layer.ScrollingManager()
-        self.scroller = scroller
-        scroller.add(self.physics_layer)
-        scroller.add(self.terrain_layer)
-        scroller.add(self.cam_layer)
+        #terrain_layer = self.terrain_layer
+
+        #self.scroller = scroller
+        self.scroller.add(self.terrain_layer, z=0)
+        self.scroller.add(self.physics_layer, z=1)
+        #scroller.add(self.cam_layer)
 
         #Begin physics segment collider generation. (This is crazy!)
         self.air_cells = []
@@ -85,7 +99,13 @@ class Scroller(object):
         #Begin Keyboard code.
         keyboard = key.KeyStateHandler()
         director.window.push_handlers(keyboard)
-        director.window.push_handlers(self.on_key_press, self.on_mouse_scroll, self.on_mouse_press)
+        director.window.push_handlers(self.on_key_press, self.on_key_release, self.on_mouse_scroll, self.on_mouse_press)
+
+    def update(self, dt):
+        self.physics_layer.update(dt)
+        #Forces focus and allows to go out of map bounds. There is a different function to keep it in bounds.
+        self.scroller.set_focus(*self.physics_layer.player.sprite.position)
+
 
     def move_cam_up(self, dt):
         self.cam_target.y = self.cam_target.y + 1
@@ -105,39 +125,46 @@ class Scroller(object):
             else:
                 self.terrain_layer.visible = True
                 print "Terrain layer On"
-
-
-        '''if symbol == key.W:
+        if symbol == key.W:
             print "W key pressed"
-            self.clock.schedule(self.move_cam_up)
+            self.physics_layer.player.body.velocity.y = 200
         if symbol == key.S:
             print "S key pressed"
-            self.clock.schedule(self.move_cam_down)
+            self.physics_layer.player.body.velocity.y = -200
         if symbol == key.A:
             print "A key pressed"
-            self.clock.schedule(self.move_cam_left)
+            self.physics_layer.player.body.velocity.x = -200
         if symbol == key.D:
             print "D key pressed"
-            self.clock.schedule(self.move_cam_right)'''
+            self.physics_layer.player.body.velocity.x = 200
+        if symbol == key.SPACE:
+            self.physics_layer.player.body.apply_impulse(pymunk.Vec2d(0, 500), (0, 0))
 
 
-    '''def on_key_release(self, symbol, modifiers):
+
+    def on_key_release(self, symbol, modifiers):
         if symbol == key.W:
             print "stopped"
-            self.clock.unschedule(self.move_cam_up)
+            self.physics_layer.player.body.velocity.y = 0
+            #self.clock.unschedule(self.move_cam_up)
         if symbol == key.S:
             print "stopped"
-            self.clock.unschedule(self.move_cam_down)
+            #self.clock.unschedule(self.move_cam_down)
+            self.physics_layer.player.body.velocity.y = 0
         if symbol == key.A:
             print "stopped"
-            self.clock.unschedule(self.move_cam_left)
+            self.physics_layer.player.body.velocity.x = 0
+            #self.clock.unschedule(self.move_cam_left)
         if symbol == key.D:
             print "stopped"
-            self.clock.unschedule(self.move_cam_right)'''
+            self.physics_layer.player.body.velocity.x = 0
+            #self.clock.unschedule(self.move_cam_right)
+        if symbol == key.SPACE:
+            self.physics_layer.player.body.apply_impulse(pymunk.Vec2d(0, -200), (0, 0))
 
     def on_mouse_press (self, x, y, buttons, modifiers):
         #Gets the cell's location from the scrolling manager world coordinates.
-        self.cell = self.terrain_layer.get_at_pixel(*scroller.pixel_from_screen(x, y))
+        self.cell = self.terrain_layer.get_at_pixel(*self.scroller.pixel_from_screen(x, y))
         #Removes the tile, effectively deleting it from the map.
         self.cell.tile = None
         #Redraws the map. Need to create function that redraws the tile only.
@@ -148,6 +175,7 @@ class Scroller(object):
 
     _desired_scale = 1
     def on_mouse_scroll(self, x, y, dx, dy):
+        pass
         #Zooms the map.
         if dy < 0:
             if self._desired_scale < .2: return True
@@ -156,10 +184,10 @@ class Scroller(object):
             if self._desired_scale > 2: return True
             self._desired_scale += .1
         if dy:
-            scroller.do(cocos.actions.ScaleTo(self._desired_scale, .1))
+            self.scroller.do(cocos.actions.ScaleTo(self._desired_scale, .1))
             return True
 
-class MapCollider(actions.Action, tiles.RectMapCollider):
+'''class MapCollider(actions.Action, tiles.RectMapCollider):
     global scroller, terrain_layer, keyboard
     on_ground = True
     MOVE_SPEED = 200
@@ -193,4 +221,4 @@ class MapCollider(actions.Action, tiles.RectMapCollider):
         self.target.position = new.center
 
         #Forces focus and allows to go out of map bounds. There is a different function to keep it in bounds.
-        scroller.force_focus(*new.center)
+        scroller.force_focus(*new.center)'''

@@ -26,5 +26,5 @@ class MyGame(cocos.scene.Scene):
 
 
         #Begin clock tick.
-        #self.clock.schedule(self.scroller.update)
+        self.clock.schedule(self.scroller.update)
 

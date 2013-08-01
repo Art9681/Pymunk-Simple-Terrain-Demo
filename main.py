@@ -3,6 +3,9 @@ from cocos.director import director
 import scenes
 import terrain_gen
 
+# Disable error checking for increased performance
+pyglet.options['debug_gl'] = False
+
 def main():
     pyglet.font.add_directory('.')
     director.init(width=1024, height=768, do_not_scale=True, caption = "TerrainDemo", vsync = False, resizable = True)
