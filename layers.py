@@ -20,12 +20,19 @@ class PhysicsLayer(cocos.layer.ScrollableLayer):
 
         self.add(self.player.sprite)
 
+        #If true, draws pymunk bodies using opengl. False = no drawing.
+        self.bodies_visible = False
+
     def create_segment(self, start, end):
         self.segment = pymunk.Segment(self.space.static_body, start, end, 1)
         self.space.add(self.segment)
 
-    '''def draw(self):
-        pymunk.pyglet_util.draw(self.space)'''
+
+    def draw(self):
+        if self.bodies_visible == True:
+            pymunk.pyglet_util.draw(self.space)
+        else:
+            pass
 
     def update(self, dt):
         self.player.update()
@@ -125,6 +132,10 @@ class Scroller(object):
             else:
                 self.terrain_layer.visible = True
                 print "Terrain layer On"
+            if self.physics_layer.bodies_visible == False:
+                self.physics_layer.bodies_visible = True
+            else:
+                self.physics_layer.bodies_visible = False
         if symbol == key.W:
             print "W key pressed"
             self.physics_layer.player.body.velocity.y = 200
