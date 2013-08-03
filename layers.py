@@ -1,5 +1,6 @@
 import cocos
 from cocos import layer, tiles, actions
+import pyglet
 from pyglet.window import key, mouse
 import pymunk
 import pymunk.pyglet_util
@@ -11,17 +12,17 @@ class PhysicsLayer(cocos.layer.ScrollableLayer):
         super( PhysicsLayer, self ).__init__()
 
         self.space = pymunk.Space()
-        self.space.collision_slop = 0.3
         self.space.gravity = (0,-700)
 
-        self.player = player.Player(pos=(5056/2, 4000))
-
-        self.space.add(self.player.body, self.player.shape)
+        self.player = player.Player(pos=(150, 50))
 
         self.add(self.player.sprite)
 
         #If true, draws pymunk bodies using opengl. False = no drawing.
         self.bodies_visible = False
+
+        self.space.add(self.player.body,
+                       self.player.shape)
 
     def create_segment(self, start, end):
         self.segment = pymunk.Segment(self.space.static_body, start, end, 1)
@@ -38,12 +39,14 @@ class PhysicsLayer(cocos.layer.ScrollableLayer):
         self.player.update()
         self.space.step(dt)
 
-
 #Contains scrolling manager, tilemap and player layers.
 class Scroller(object):
     def __init__(self, director, clock):
         super(Scroller, self).__init__()
         global scroller, terrain_layer, keyboard
+
+        #Initialize some stuff.
+        self.air_sprite = pyglet.image.load('air.png')
 
         self.clock = clock
         #Begin Scrolling Manager.
@@ -150,6 +153,8 @@ class Scroller(object):
             self.physics_layer.player.body.velocity.x = 200
         if symbol == key.SPACE:
             self.physics_layer.player.body.apply_impulse(pymunk.Vec2d(0, 500), (0, 0))
+        if symbol == key.I:
+            print len(self.physics_layer.space.shapes)
 
 
 
@@ -176,24 +181,54 @@ class Scroller(object):
     def on_mouse_press (self, x, y, buttons, modifiers):
         #Gets the cell's location from the scrolling manager world coordinates.
         self.cell = self.terrain_layer.get_at_pixel(*self.scroller.pixel_from_screen(x, y))
-        #Removes the tile, effectively deleting it from the map.
-        self.cell.tile = None
+        #Gets the clicked cell's neighbors.
+        self.neighbors = self.terrain_layer.get_neighbors(self.cell)
+        top = self.neighbors[(0, 1)]
+        bottom = self.neighbors[(0, -1)]
+        right = self.neighbors[(1, 0)]
+        left = self.neighbors[(-1, 0)]
+
+        #Changes clicked tile to air tile.
+        self.cell.tile = cocos.tiles.Tile(id= 'air', properties= {'btype': 'air'}, image= self.air_sprite)
         #Redraws the map. Need to create function that redraws the tile only.
         self.terrain_layer.set_dirty()
+
+        #Gets a list of pymunk objects within 16 pixels of tile center. Since tile size is 32 pixels, this will always find pymunk objects at the border of the tile, hence, the pymunk segments around it if any.
+        self.near_shapes =  self.physics_layer.space.nearest_point_query((self.cell.position[0] + 16, self.cell.position[1] + 16), 16, -1, 0)
+
+        #Check to see if pymunk object is the player, if True, ignore this object.
+        for i in self.near_shapes:
+            if i['shape'] == self.physics_layer.player.shape:
+                pass
+            else:
+                #Deletes all pymunk objects from space, except the player object.
+                self.physics_layer.space._remove_shape(i['shape'])
+
+        #The following conditionals determine where to generate segments when a tile is changed to an air tile.
+        if top.tile.properties['btype'] != 'air':
+                    self.physics_layer.create_segment(start=(self.cell.position[0], self.cell.position[1]+32), end=((self.cell.position[0]+32),self.cell.position[1]+32))
+
+        if bottom.tile.properties['btype'] != 'air':
+            self.physics_layer.create_segment(start=(self.cell.position[0], self.cell.position[1]), end=((self.cell.position[0]+32),self.cell.position[1]))
+
+        if right.tile.properties['btype'] != 'air':
+                    self.physics_layer.create_segment(start=(self.cell.position[0]+32, self.cell.position[1]), end=((self.cell.position[0]+32),self.cell.position[1]+32))
+
+        if left.tile.properties['btype'] != 'air':
+                    self.physics_layer.create_segment(start=(self.cell.position[0], self.cell.position[1]), end=((self.cell.position[0]),self.cell.position[1]+32))
 
     def on_mouse_motion(self, x, y, dx, dy):
         pass
 
     _desired_scale = 1
     def on_mouse_scroll(self, x, y, dx, dy):
-        pass
         #Zooms the map.
         if dy < 0:
             if self._desired_scale < .2: return True
             self._desired_scale -= .1
         elif dy > 0:
             if self._desired_scale > 2: return True
-            self._desired_scale += .1
+            self._desired_scale = 0
         if dy:
             self.scroller.do(cocos.actions.ScaleTo(self._desired_scale, .1))
             return True
