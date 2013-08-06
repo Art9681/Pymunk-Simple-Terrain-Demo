@@ -5,7 +5,7 @@ import xml.etree.cElementTree as ET
 class Terrain(object):
     def __init__(self):
         #The map variables.
-        self.map_size = (5056, 5056) #Map size in pixels.
+        self.map_size = (15056, 5056) #Map size in pixels.
         self.tile_size = 32 #Tiles are 32x32
         #Divide map size by tile size to produce columns and rows.
         self.columns = self.map_size[0]/self.tile_size
@@ -13,6 +13,7 @@ class Terrain(object):
         #Sets the initial column height to half of the map size.
         self.col_height = self.rows/2
 
+        ###Begin terrain noise code###
         #This list holds all integers representing 2D simplex noise data.
         self.noise_data = []
 
@@ -20,13 +21,11 @@ class Terrain(object):
         #Used to keep track of the last item in nData we accessed.
         self.noise_counter = 0
 
-        #The texture source variables.
-        self.source_size = (96, 64)
 
-        ###Begin terrain noise code###
         self.octaves = random.randint(1, 5)
         print "Octaves: %s" %self.octaves
-        self.freq = random.uniform(1.0, 10.0) * self.octaves
+        self.freq = random.uniform(3.0, 7.0) * self.octaves
+        #self.freq = 2.0 * self.octaves
         #self.freq = 8.0 * self.octaves
         print "Noise Frequency: %s" %self.freq
 
@@ -67,7 +66,7 @@ class Terrain(object):
 
             for row in range(self.rows):
                 self.cell = ET.SubElement(self.column, "cell")
-                self.cell.set("tile", "air" if row > self.col_height else ("rock" if self.noise_data[self.noise_counter] <= 64 else ("air" if self.noise_data[self.noise_counter] <= 128 else ("dirt" if self.noise_data[self.noise_counter] <= 192 else "sand"))))
+                self.cell.set("tile", "air" if row > self.col_height else ("dirt" if row > self.col_height-10 else ("rock" if self.noise_data[self.noise_counter] <= 64 else ("air" if self.noise_data[self.noise_counter] <= 128 else ("dirt" if self.noise_data[self.noise_counter] <= 192 else "sand")))))
 
                 self.noise_counter += 1
 
