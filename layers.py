@@ -56,23 +56,13 @@ class Scroller(object):
         self.physics_layer = PhysicsLayer(clock)
 
         #The camera layer. Our target is the sprite.
-        self.cam_layer = cocos.layer.ScrollableLayer()
         self.cam_target = cocos.sprite.Sprite("player.png")
-
-        #self.cam_target.do(MapCollider())
-
-        #Spawn the camera target object at the viewport length/2 and terrain map height/2. Need to automate this.
-        #self.cam_target.position = (1024/2, 5012/2)
-        #self.cam_layer.add(self.cam_target)
 
         #Begin terrain map layer.
         self.terrain_layer = cocos.tiles.load('test.xml')['map0']
-        #terrain_layer = self.terrain_layer
 
-        #self.scroller = scroller
         self.scroller.add(self.terrain_layer, z=0)
         self.scroller.add(self.physics_layer, z=1)
-        #scroller.add(self.cam_layer)
 
         #Begin physics segment collider generation. (This is crazy!)
         self.air_cells = []
@@ -88,7 +78,6 @@ class Scroller(object):
             if top:
                 if top.tile.properties['btype'] != 'air':
                     self.physics_layer.create_segment(start=(air_cell.position[0], air_cell.position[1]+32), end=((air_cell.position[0]+32),air_cell.position[1]+32))
-                    #print top.tile.properties['btype']
 
             bottom = cell_neighbors[(0, -1)]
             if bottom:
@@ -115,7 +104,6 @@ class Scroller(object):
         self.physics_layer.update(dt)
         #Forces focus and allows to go out of map bounds. There is a different function to keep it in bounds.
         self.scroller.set_focus(*self.physics_layer.player.sprite.position)
-
 
     def move_cam_up(self, dt):
         self.cam_target.y = self.cam_target.y + 1
@@ -155,8 +143,6 @@ class Scroller(object):
             self.physics_layer.player.body.apply_impulse(pymunk.Vec2d(0, 500), (0, 0))
         if symbol == key.I:
             print len(self.physics_layer.space.shapes)
-
-
 
     def on_key_release(self, symbol, modifiers):
         if symbol == key.W:
@@ -232,39 +218,3 @@ class Scroller(object):
         if dy:
             self.scroller.do(cocos.actions.ScaleTo(self._desired_scale, .1))
             return True
-
-'''class MapCollider(actions.Action, tiles.RectMapCollider):
-    global scroller, terrain_layer, keyboard
-    on_ground = True
-    MOVE_SPEED = 200
-    JUMP_SPEED = 500
-    GRAVITY = -1500
-
-    def start(self):
-        # initial velocity
-        self.target.velocity = (0, 0)
-
-    def step(self, dt):
-        dx, dy = self.target.velocity
-        # using the player controls, gravity and other acceleration influences
-        # update the velocity
-        dx = (keyboard[key.D] - keyboard[key.A]) * self.MOVE_SPEED *dt
-        dy = dy + self.GRAVITY * dt
-        if self.on_ground and keyboard[key.SPACE]:
-            dy = self.JUMP_SPEED
-
-        # get the player's current bounding rectangle
-        last = self.target.get_rect()
-        new = last.copy()
-        new.x += dx
-        new.y += dy * dt
-
-        # run the collider
-        dx, dy = self.target.velocity = self.collide_map(terrain_layer, last, new, dy, dx)
-        self.on_ground = bool(new.y == last.y)
-
-        # player position is anchored in the center of the image rect
-        self.target.position = new.center
-
-        #Forces focus and allows to go out of map bounds. There is a different function to keep it in bounds.
-        scroller.force_focus(*new.center)'''

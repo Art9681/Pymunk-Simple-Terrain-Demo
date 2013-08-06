@@ -19,10 +19,9 @@ class MyGame(cocos.scene.Scene):
         self.dt = 1/60
 
         #The layers this scene has.
-        self.bg_color = cocos.layer.ColorLayer(100, 120, 150, 255)
         self.scroller = layers.Scroller(director, self.clock)
-        self.add(self.bg_color, z=0)
-        self.add(self.scroller.scroller, z=1)
+
+        self.add(self.scroller.scroller, z=0)
 
 
         #Begin clock tick.

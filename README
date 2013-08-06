@@ -13,12 +13,12 @@ Notes:
 - Also lags a bit on quit.
 
 Recent changes:
+- Improved terrain gen at horizon. Hills now generated with 1D perlin noise. Good stuff!
 - Solid blocks can be clicked on to remove. This behavior changes the solid block to an air block and regenerates the segment colliders on the fly. (AWESOME SAUCE!!)
 - Added Pymunk 2D physics.
 - Added algorithm to generate pymunk segment colliders around solid terrain blocks.
 
 TODO:
-- Collider segments re-generate when player breaks block.
 - Add developer menu.
 - Limit zoom to prevent crash.
 - Highlight tile on mouse hover.
@@ -29,7 +29,6 @@ TODO:
 Older changes:
 - Added back ground color layer.
 - Map is now divided between ground and sky.
-- Created function that interpolates column height to create rolling hills horizon.
 - Mouse scroll zooms in or out. Careful! Scrolling while you zoom out too much it will crash.
 - Mouse click removes tile and triggers map redraw. (Pretty fast for the map size!)
 - Moar caves!
@@ -37,6 +36,7 @@ Older changes:
 - Added input. W, A, S, D keys scroll level.
 
 Removed:
+- Created function that interpolates column height to create rolling hills horizon. (Replaced by new noise function).
 -Added basic collision model. Map blocks only have collision enabled on top segment for now. You can walk through the blocks but not fall through them.
 - Mouse move returns position in world coordinates.
 - Mouse click returns Cell texture id.

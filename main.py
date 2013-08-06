@@ -8,7 +8,7 @@ pyglet.options['debug_gl'] = False
 
 def main():
     pyglet.font.add_directory('.')
-    director.init(width=1024, height=768, do_not_scale=True, caption = "TerrainDemo", vsync = False, resizable = True)
+    director.init(width=1024, height=768, do_not_scale=True, caption = "TerrainDemo", vsync = False, resizable = False)
     director.show_FPS = True
     my_scene = scenes.MyGame(director)
 
@@ -16,7 +16,7 @@ def main():
     director.run(my_scene)
 
 if __name__ == '__main__':
-    #terrain_gen.Gen_XML()
+    terrain_gen.Terrain()
     #Look for resources in the data directory.  If you modify the path, you must call reindex.
     pyglet.resource.path.append('data')
     pyglet.resource.reindex()
