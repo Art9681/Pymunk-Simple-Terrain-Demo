@@ -14,7 +14,7 @@ class PhysicsLayer(cocos.layer.ScrollableLayer):
         self.space = pymunk.Space()
         self.space.gravity = (0,-700)
 
-        self.player = player.Player(pos=(50, 5056/2))
+        self.player = player.Player(pos=(50, 50))
 
         self.add(self.player.sprite)
 

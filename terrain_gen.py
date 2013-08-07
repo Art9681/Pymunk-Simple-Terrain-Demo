@@ -5,7 +5,7 @@ import xml.etree.cElementTree as ET
 class Terrain(object):
     def __init__(self):
         #The map variables.
-        self.map_size = (15056, 5056) #Map size in pixels.
+        self.map_size = (5056, 5056) #Map size in pixels.
         self.tile_size = 32 #Tiles are 32x32
         #Divide map size by tile size to produce columns and rows.
         self.columns = self.map_size[0]/self.tile_size
@@ -22,7 +22,7 @@ class Terrain(object):
         self.noise_counter = 0
 
 
-        self.octaves = random.randint(1, 5)
+        self.octaves = random.randint(10, 15)
         print "Octaves: %s" %self.octaves
         self.freq = random.uniform(3.0, 7.0) * self.octaves
         #self.freq = 2.0 * self.octaves
