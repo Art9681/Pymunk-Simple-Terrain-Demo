@@ -19,7 +19,6 @@ Recent changes:
 - Added algorithm to generate pymunk segment colliders around solid terrain blocks.
 
 TODO:
-- Generate gradient background using Squirtle module?
 - Add multiple passes to the terrain gen. One pass generates all the solid tiles, second pass generates cave system.
 - Load/Unload tiles during runtime so that the world can potentially be infinite in size.
 - Add developer menu.
